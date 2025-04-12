@@ -37,14 +37,12 @@ java {
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            groupId = 'com.featherloader'
-            artifactId = 'featherloader'
-            version = '1.0.0'
+        mavenJava(MavenPublication) {
             from components.java
         }
     }
 }
+
 tasks.named('test') {
     useJUnitPlatform()
 }
