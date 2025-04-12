@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'com.featherloader'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'Minecraft'
+        url = 'https://libraries.minecraft.net/'
+    }
+    maven {
+        name = 'SpongePowered'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+}
+
+dependencies {
+    implementation 'org.spongepowered:mixin:0.8.5'
+    implementation 'com.google.guava:guava:30.1.1-jre'
+
+    // You'll need to add Minecraft server as a dependency
+    // This is just a placeholder - you'll need to obtain this through the official channels
+    // compileOnly 'com.mojang:minecraft:1.21'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.featherloader'
+            artifactId = 'featherloader'
+            version = '1.0.0'
+            from components.java
+        }
+    }
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.featherloader.installer.FeatherInstaller',
+                'Implementation-Title': 'FeatherLoader',
+                'Implementation-Version': project.version
+        )
+    }
+}
