@@ -3,9 +3,6 @@ package com.featherloader.core;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-/**
- * Custom class loader for loading mods
- */
 public class FeatherClassLoader extends URLClassLoader {
     static {
         registerAsParallelCapable();

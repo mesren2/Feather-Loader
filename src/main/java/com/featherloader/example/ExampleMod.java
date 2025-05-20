@@ -5,15 +5,22 @@ import com.featherloader.api.ModInfo;
 
 import java.util.logging.Logger;
 
-/**
- * Example mod for FeatherLoader
- */
 public class ExampleMod implements FeatherMod {
-    private static final Logger LOGGER = Logger.getLogger("FeatherExample");
+    private static final Logger LOGGER = Logger.getLogger("FeatherExampleMod");
+
+    @Override
+    public void onPreInitialize() {
+        LOGGER.info("ExampleMod pre-initializing");
+    }
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Initializing ExampleMod - Hello, Minecraft!");
+        LOGGER.info("ExampleMod initializing - Hello, Minecraft world!");
+    }
+
+    @Override
+    public void onPostInitialize() {
+        LOGGER.info("ExampleMod post-initializing");
     }
 
     @Override

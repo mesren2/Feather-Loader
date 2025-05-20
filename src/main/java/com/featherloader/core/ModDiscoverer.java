@@ -6,7 +6,6 @@ import com.featherloader.api.ModInfo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -35,7 +34,7 @@ public class ModDiscoverer {
         }
     }
 
-    private static void loadMod(File modFile, List<FeatherMod> loadedMods) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private static void loadMod(File modFile, List<FeatherMod> loadedMods) throws IOException, ReflectiveOperationException {
         LOGGER.info("Loading mod from: " + modFile.getName());
 
         JarFile jarFile = new JarFile(modFile);
@@ -70,7 +69,7 @@ public class ModDiscoverer {
         }
 
         // Instantiate mod
-        FeatherMod mod = (FeatherMod) clazz.getDeclaringClass().newInstance();
+        FeatherMod mod = (FeatherMod) clazz.getDeclaredConstructor().newInstance();
         loadedMods.add(mod);
 
         LOGGER.info("Loaded mod: " + mod.getModInfo().name() + " v" + mod.getModInfo().version());

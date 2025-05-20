@@ -4,14 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.jar.JarFile;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
-/**
- * Installer for FeatherLoader
- */
+import org.json.JSONObject;
+
 public class FeatherInstaller {
     private static final String TITLE = "FeatherLoader Installer";
     private static final String VERSION = "1.0.0";
@@ -119,7 +122,7 @@ public class FeatherInstaller {
                     try {
                         install(new File(mcDir), enableMixins);
                         SwingUtilities.invokeLater(() -> {
-                            JOptionPane.showMessageDialog(frame, "FeatherLoader installed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(frame, "FeatherLoader installed successfully! Please restart the Minecraft Launcher.", "Success", JOptionPane.INFORMATION_MESSAGE);
                             frame.dispose();
                         });
                     } catch (Exception ex) {
@@ -164,16 +167,12 @@ public class FeatherInstaller {
             modsDir.mkdirs();
         }
 
-        // Extract FeatherLoader JAR
+        // Get current JAR file
         File currentJar = getCurrentJarFile();
         File featherJar = new File(featherDir, "featherloader-" + VERSION + ".jar");
 
-        if (currentJar.equals(featherJar)) {
-            // We're already in the installed JAR, just update the config
-        } else {
-            // Copy the installer JAR to the FeatherLoader directory
-            Files.copy(currentJar.toPath(), featherJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
+        // Copy the JAR to the installation directory
+        Files.copy(currentJar.toPath(), featherJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         // Create configuration file
         File configFile = new File(featherDir, "config.properties");
@@ -183,10 +182,17 @@ public class FeatherInstaller {
             writer.write("enable-mixins=" + enableMixins + "\n");
         }
 
-        // Modify Minecraft JAR to add FeatherLoader as an agent
-        modifyMinecraftLauncher(minecraftDir, featherJar);
+        // Copy to libraries folder (needed by Minecraft)
+        File librariesDir = new File(minecraftDir, "libraries/com/featherloader/featherloader/" + VERSION);
+        librariesDir.mkdirs();
 
-        // Install example mod if it doesn't exist
+        File libraryJar = new File(librariesDir, "featherloader-" + VERSION + ".jar");
+        Files.copy(featherJar.toPath(), libraryJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        // Create a new launcher profile
+        createLauncherProfile(minecraftDir, enableMixins);
+
+        // Install example mod
         installExampleMod(modsDir);
     }
 
@@ -195,12 +201,9 @@ public class FeatherInstaller {
         return new File(url.toURI());
     }
 
-    private static void modifyMinecraftLauncher(File minecraftDir, File featherJar) throws Exception {
-        // This is a simplified implementation
-        // In a real implementation, you'd need to modify the Minecraft launcher profile
-        // to add FeatherLoader as a Java agent
-
+    private static void createLauncherProfile(File minecraftDir, boolean enableMixins) throws Exception {
         File launcherProfilesJson = new File(minecraftDir, "launcher_profiles.json");
+
         if (!launcherProfilesJson.exists()) {
             throw new FileNotFoundException("Minecraft launcher profiles not found");
         }
@@ -213,31 +216,56 @@ public class FeatherInstaller {
 
         // Read the launcher profiles
         String content = new String(Files.readAllBytes(launcherProfilesJson.toPath()));
+        JSONObject root = new JSONObject();
 
-        // In a real implementation, you'd parse and modify the JSON
-        // For simplicity, we'll just check if FeatherLoader is already installed
-        if (content.contains("featherloader")) {
-            System.out.println("FeatherLoader appears to be already installed in launcher profiles");
-        } else {
-            System.out.println("Would modify launcher profiles here in a real implementation");
-            // In a real implementation, you would:
-            // 1. Parse the JSON
-            // 2. Add a new profile or modify existing ones to include FeatherLoader as a Java agent
-            // 3. Write the modified JSON back to the file
+        if (!root.has("profiles")) {
+            root.put("profiles", new JSONObject());
+        }
+
+        JSONObject profiles = (JSONObject) root.get("profiles");
+
+        // Create a profile ID that's unique to this version of FeatherLoader
+        String profileId = "featherloader-" + VERSION.replace('.', '_');
+
+        // Create our profile
+        JSONObject profile = new JSONObject();
+        profile.put("name", "FeatherLoader " + VERSION + " for 1.21");
+        profile.put("type", "custom");
+        profile.put("created", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT));
+        profile.put("lastUsed", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT));
+        profile.put("icon", "Furnace");
+        profile.put("lastVersionId", "1.21"); // Change this to match your target version
+
+        // Set up JVM arguments to load our launcher
+        String jvmArgs = "-Xmx2G";
+        if (enableMixins) {
+            jvmArgs += " -Dfeatherloader.mixins.enabled=true";
+        }
+        profile.put("javaArgs", jvmArgs);
+
+        // Set the main class to our launcher
+        profile.put("mainClass", "com.featherloader.launcher.FeatherLauncher");
+
+        // Add the profile to the launcher profiles
+        profiles.put(profileId, profile);
+
+        // Write the updated launcher profiles
+        try (FileWriter writer = new FileWriter(launcherProfilesJson)) {
+            writer.write("2");
         }
     }
 
     private static void installExampleMod(File modsDir) throws Exception {
-        // Check if example mod already exists
+        // Create a simple example mod
         File exampleModFile = new File(modsDir, "featherloader-example-mod.jar");
+
         if (exampleModFile.exists()) {
+            // Example mod already exists
             return;
         }
 
-        // In a real implementation, you would extract the example mod from the installer JAR
-        // For simplicity, we'll just create a minimal example mod
-
-        // TODO: In a real implementation, you would include a pre-built example mod in the installer resources
-        System.out.println("Would install example mod here in a real implementation");
+        // In a real implementation, you'd extract the example mod from resources
+        // For simplicity, we'll just log that we would create it
+        System.out.println("Would create example mod in: " + exampleModFile.getAbsolutePath());
     }
 }

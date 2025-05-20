@@ -1,50 +1,38 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'java-gradle-plugin'
+    id 'groovy'
 }
 
 group = 'com.featherloader'
-version = '1.0.1'
+version = '1.0.2'
 
 repositories {
     mavenCentral()
     maven {
-        name = 'Minecraft'
-        url = 'https://libraries.minecraft.net/'
-    }
-    maven {
         name = 'SpongePowered'
         url = 'https://repo.spongepowered.org/maven'
     }
+    maven { url = 'https://maven.fabricmc.net/' }
+    gradlePluginPortal()
 }
 
 dependencies {
     implementation 'org.spongepowered:mixin:0.8.5'
-    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'org.json:json:20230227'
 
-    // You'll need to add Minecraft server as a dependency
-    // This is just a placeholder - you'll need to obtain this through the official channels
-    // compileOnly 'com.mojang:minecraft:1.21'
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.google.guava:guava:33.0.0-jre'
+
+    implementation gradleApi()
+    implementation localGroovy()
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
 }
 
 jar {
@@ -55,4 +43,46 @@ jar {
                 'Implementation-Version': project.version
         )
     }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/MANIFEST.MF'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/YourUsername/FeatherLoader")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
+task runDev(type: JavaExec) {
+    group = 'featherloader'
+    description = 'Runs Minecraft with FeatherLoader in development mode'
+
+    mainClass = 'com.featherloader.dev.DevLauncher'
+    classpath = sourceSets.main.runtimeClasspath
+
+    jvmArgs = [
+            '-Dfeatherloader.minecraft.dir=' + project.findProperty('minecraftDir') ?: System.getProperty('user.home') + '/.minecraft',
+            '-Dfeatherloader.dev.mods=' + project.projectDir.absolutePath,
+            '-Dfeatherloader.mixins=true',
+            '-Dfeatherloader.debug=true'
+    ]
+
+    // You'll need to provide Minecraft arguments here
+    args = []
 }

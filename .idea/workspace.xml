@@ -5,9 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ec92905-1d53-4eb8-b12b-fafc8a1c12c9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/api/config/ConfigManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/api/event/EventBus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/dev/DevLauncher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/example/feather-mod.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/gradle/FeatherDevPlugin.groovy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/launcher/FeatherLauncher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/api/FeatherMod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/api/FeatherMod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/api/ModInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/api/ModInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/core/FeatherClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/core/FeatherClassLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/core/FeatherLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/core/FeatherLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/core/ModDiscoverer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/core/ModDiscoverer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/example/ExampleMod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/example/ExampleMod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/installer/FeatherInstaller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/installer/FeatherInstaller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/featherloader/mixin/FeatherMixinBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/featherloader/mixin/FeatherMixinBootstrap.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +54,7 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="FeatherLoader" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
+                <item name="featherloader" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -50,6 +63,13 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -57,11 +77,17 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2vdbMT9Ub10D11BpE47BDORR1PH" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.Feather-Loader [:com.featherloader.launcher.FeatherLauncher.main()].executor": "Run",
+    "Gradle.Feather-Loader [build].executor": "Run",
+    "Gradle.Feather-Loader [runDev].executor": "Run",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
@@ -79,7 +105,74 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.Feather-Loader [runDev]">
+    <configuration name="FeatherLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.featherloader.launcher.FeatherLauncher" />
+      <module name="FeatherLoader.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.featherloader.launcher.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FeatherLoader Dev" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="temurin-21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.featherloader.dev.DevLauncher" />
+      <module name="FeatherLoader.main" />
+      <option name="VM_PARAMETERS" value="-Dfeatherloader.minecraft.dir=/path/to/.minecraft -Dfeatherloader.dev.mods=/path/to/your/mod/project -Dfeatherloader.mixins=true -Dfeatherloader.debug=true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Feather-Loader [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="Feather-Loader [runDev]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runDev" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="Feather-Loader" />
       <method v="2">
@@ -91,6 +184,19 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Application.FeatherLoader Dev" />
+      <item itemvalue="Application.FeatherLauncher" />
+      <item itemvalue="Gradle.Feather-Loader [runDev]" />
+      <item itemvalue="Gradle.Feather-Loader [build]" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Feather-Loader [runDev]" />
+        <item itemvalue="Application.FeatherLauncher" />
+        <item itemvalue="Gradle.Feather-Loader [build]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -111,7 +217,13 @@
       <workItem from="1744479307406" duration="290000" />
       <workItem from="1744481178595" duration="239000" />
       <workItem from="1744481613968" duration="384000" />
-      <workItem from="1744482305718" duration="93000" />
+      <workItem from="1744482305718" duration="133000" />
+      <workItem from="1744482467876" duration="13000" />
+      <workItem from="1744482657070" duration="1899000" />
+      <workItem from="1744487988051" duration="824000" />
+      <workItem from="1744492471345" duration="3943000" />
+      <workItem from="1744508231281" duration="811000" />
+      <workItem from="1744566656682" duration="3142000" />
     </task>
     <servers />
   </component>
